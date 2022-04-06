@@ -1,0 +1,240 @@
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+  background-color: #000;
+}
+
+.to-top {
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  color: #fff;
+  margin: 25px 35px;
+  position: fixed;
+  z-index: 2;
+  cursor: pointer;
+  border-radius: 7px;
+  width: 40px;
+  height: 40px;
+  transition: opacity 1s ease-in-out;
+  border: none;
+  outline: none;
+  transition: background-color 0.5s;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.to-top:hover {
+  transition: background-color 0.5s;
+  background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+.hero-bg {
+  background-image: url("../images/hero-bg.png") !important;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.token-search-bar {
+  margin: auto;
+  width: 100%;
+  text-align: center;
+  z-index: 3;
+}
+
+.search-result {
+  cursor: pointer;
+  display: block;
+  text-align: left;
+  font-weight: bold;
+  z-index: 5;
+}
+
+.search-image {
+  float: left;
+  margin: 0 15px;
+  max-height: 35px;
+  max-width: 35px;
+  border: none transparent;
+  border-radius: 100%;
+  background-color: #000;
+}
+
+.token-table {
+  border: #9f7aea solid 0.5px;
+  border-radius: 15px;
+  padding: 25px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+.token-table h3 {
+  text-align: left;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+}
+
+.liquidity-chart {
+  position: relative;
+  border: #9f7aea solid 0.5px;
+  border-radius: 15px;
+  padding: 25px;
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  min-height: 415px;
+  width: 100%;
+}
+
+.volume-chart {
+  position: relative;
+  border: #9f7aea solid 0.5px;
+  border-radius: 15px;
+  padding: 25px;
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  min-height: 415px;
+  width: 100%;
+}
+
+.token-image {
+  max-height: 35px;
+  max-width: 35px;
+  border: none transparent;
+  border-radius: 100%;
+  background-color: #000;
+}
+
+.spinner {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translate(50%, 100%);
+}
+
+.loader {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  position: absolute;
+  transform: translate(0%, 0%);
+  height: 100vh;
+  width: 100vw;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+@keyframes loading {
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.25, 1.25);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+.loader img {
+  animation: loading 2s ease-out infinite;
+}
+
+.fallback {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  position: absolute;
+  transform: translate(0%, 0%);
+  height: 100vh;
+  width: 100vw;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.token-link {
+  background: #9f7aea;
+  background: -webkit-linear-gradient(
+    to bottom,
+    #9f7aea 0%,
+    #9f7aea 30%,
+    #805ad5 60%,
+    #553c9a 100%
+  );
+  background: -moz-linear-gradient(
+    to bottom,
+    #9f7aea 0%,
+    #9f7aea 30%,
+    #805ad5 60%,
+    #553c9a 100%
+  );
+  background: linear-gradient(
+    to bottom,
+    #9f7aea 0%,
+    #9f7aea 30%,
+    #805ad5 60%,
+    #553c9a 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.75px;
+  font-size: 105%;
+}
+
+.token-link:hover {
+  font-size: 110%;
+}
+
+.token-link span {
+  font-size: 105%;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.token-header {
+  background: #9f7aea;
+  background: -webkit-linear-gradient(
+    to bottom,
+    #9f7aea 0%,
+    #9f7aea 30%,
+    #805ad5 60%,
+    #553c9a 100%
+  );
+  background: -moz-linear-gradient(
+    to bottom,
+    #9f7aea 0%,
+    #9f7aea 30%,
+    #805ad5 60%,
+    #553c9a 100%
+  );
+  background: linear-gradient(
+    to bottom,
+    #9f7aea 0%,
+    #9f7aea 30%,
+    #805ad5 60%,
+    #553c9a 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
