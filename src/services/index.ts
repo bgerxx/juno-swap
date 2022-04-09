@@ -163,3 +163,17 @@ export const getVolumeHistory = async (
     )
   ).data;
 };
+
+/**
+ * These end points return pool data
+ */
+
+// return current liquidity pool data for a specific pool
+export const getCurrentPool = async (poolId: string): Promise<any> => {
+  return (await apiAxios.get(`/liquidity/pools/current/${poolId}`)).data;
+};
+
+// return current volumes for a specfic pool over the last 24h
+export const getPool24H = async (poolId: string): Promise<TokenVolume> => {
+  return (await apiAxios.get(`/volumes/pools/${poolId}/sliding/current`)).data;
+};

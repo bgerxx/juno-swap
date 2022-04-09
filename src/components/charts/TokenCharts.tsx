@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { getHolcPrices, getTokenTVL, getVolumeHistory } from "../../services";
 import { createChart } from "lightweight-charts";
 import numeral from "numeral";
-const dayjs = require("dayjs");
+import dayjs from "dayjs";
 
 export default function TokenCharts({ symbol, date }) {
   const [current, setCurrent] = useState<string | null>(null);
@@ -180,11 +180,7 @@ export default function TokenCharts({ symbol, date }) {
           </Heading>
         </Box>
 
-        <VStack
-          textAlign="center"
-          display={{ base: "block", xl: "none" }}
-          pb={3}
-        >
+        <VStack textAlign="center" display={{ base: "block", xl: "none" }}>
           <Heading as="h2" size="xl" py={1}>
             ${total}
           </Heading>
@@ -196,13 +192,14 @@ export default function TokenCharts({ symbol, date }) {
 
         <VStack
           justifyContent={{ base: "center", xl: "right" }}
-          py={{ base: 4, xl: 0 }}
+          py={{ base: 0, xl: 0 }}
         >
           <HStack
-            px={1}
             sx={{ borderRadius: 15 }}
             justifyContent="space-between"
             bg={useColorModeValue("gray.300", "gray.700")}
+            p={0}
+            m={0}
           >
             <Button
               fontSize="xs"
@@ -213,6 +210,7 @@ export default function TokenCharts({ symbol, date }) {
               color={useColorModeValue("black", "white")}
               _hover={{ bg: useColorModeValue("white", "black") }}
               _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
             >
               Volume
             </Button>
@@ -220,11 +218,10 @@ export default function TokenCharts({ symbol, date }) {
               fontSize="xs"
               disabled={metric === "l"}
               onClick={() => handleMetric("l")}
-              sx={{ borderRadius: 15 }}
               bg={useColorModeValue("gray.300", "gray.700")}
-              color={useColorModeValue("black", "white")}
               _hover={{ bg: useColorModeValue("white", "black") }}
               _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
             >
               TVL
             </Button>
@@ -232,58 +229,56 @@ export default function TokenCharts({ symbol, date }) {
               fontSize="xs"
               disabled={metric === "p"}
               onClick={() => handleMetric("p")}
-              sx={{ borderRadius: 15 }}
               bg={useColorModeValue("gray.300", "gray.700")}
               color={useColorModeValue("black", "white")}
               _hover={{ bg: useColorModeValue("white", "black") }}
               _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
             >
               Price
             </Button>
           </HStack>
 
           <HStack
-            px={1}
             sx={{ borderRadius: 15 }}
             justifyContent="space-between"
             bg={useColorModeValue("gray.300", "gray.700")}
+            p={0}
+            m={0}
           >
             <Button
               fontSize="xs"
               disabled={duration === "d"}
               onClick={() => handleDuration("d")}
-              sx={{ borderRadius: 15 }}
               bg={useColorModeValue("gray.300", "gray.700")}
-              color={useColorModeValue("black", "white")}
               _hover={{ bg: useColorModeValue("white", "black") }}
               _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
             >
-              Day
+              D
             </Button>
             <Button
               fontSize="xs"
               disabled={duration === "w"}
               onClick={() => handleDuration("w")}
-              sx={{ borderRadius: 15 }}
               bg={useColorModeValue("gray.300", "gray.700")}
               color={useColorModeValue("black", "white")}
               _hover={{ bg: useColorModeValue("white", "black") }}
               _disabled={{ bg: useColorModeValue("white", "black") }}
-              mx={3}
+              className="chart-button"
             >
-              Week
+              W
             </Button>
             <Button
               fontSize="xs"
               disabled={duration === "M"}
               onClick={() => handleDuration("M")}
-              sx={{ borderRadius: 15 }}
               bg={useColorModeValue("gray.300", "gray.700")}
-              color={useColorModeValue("black", "white")}
               _hover={{ bg: useColorModeValue("white", "black") }}
               _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
             >
-              Month
+              M
             </Button>
           </HStack>
         </VStack>
@@ -293,17 +288,19 @@ export default function TokenCharts({ symbol, date }) {
         <Divider size="xl" my={3} />
       </Center>
 
-      {metric === "v" && duration === "d" && <Box id="volume-d" />}
-      {metric === "v" && duration === "w" && <Box id="volume-w" />}
-      {metric === "v" && duration === "M" && <Box id="volume-M" />}
+      <Box minH="300px">
+        {metric === "v" && duration === "d" && <Box id="volume-d" />}
+        {metric === "v" && duration === "w" && <Box id="volume-w" />}
+        {metric === "v" && duration === "M" && <Box id="volume-M" />}
 
-      {metric === "l" && duration === "d" && <Box id="liquidity-d" />}
-      {metric === "l" && duration === "w" && <Box id="liquidity-w" />}
-      {metric === "l" && duration === "M" && <Box id="liquidity-M" />}
+        {metric === "l" && duration === "d" && <Box id="liquidity-d" />}
+        {metric === "l" && duration === "w" && <Box id="liquidity-w" />}
+        {metric === "l" && duration === "M" && <Box id="liquidity-M" />}
 
-      {metric === "p" && duration === "d" && <Box id="price-d" />}
-      {metric === "p" && duration === "w" && <Box id="price-w" />}
-      {metric === "p" && duration === "M" && <Box id="price-M" />}
+        {metric === "p" && duration === "d" && <Box id="price-d" />}
+        {metric === "p" && duration === "w" && <Box id="price-w" />}
+        {metric === "p" && duration === "M" && <Box id="price-M" />}
+      </Box>
     </Box>
   );
 }

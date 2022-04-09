@@ -4,13 +4,12 @@ import ScrollToTop from "react-scroll-to-top";
 
 export default function BackToTop() {
   const { pathname } = useLocation();
-  let position = window.scrollY;
 
   useEffect(() => {
-    if (pathname || position > 0) {
+    if (pathname) {
       window.scrollTo(0, 0);
     }
-  }, [pathname, position]);
+  }, [pathname]);
 
   return (
     <ScrollToTop

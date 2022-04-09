@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { getHistoricalVolume } from "../../services";
 import { createChart } from "lightweight-charts";
 import numeral from "numeral";
-const dayjs = require("dayjs");
+import dayjs from "dayjs";
 
 export default function TotalLiquidity() {
   const [total, setTotal] = useState<string | null>(null);
@@ -100,9 +100,11 @@ export default function TotalLiquidity() {
         <Divider size="xl" my={3} />
       </Center>
 
-      {duration === "d" && <Box id="volume-d" />}
-      {duration === "w" && <Box id="volume-w" />}
-      {duration === "M" && <Box id="volume-M" />}
+      <Box minH="300px">
+        {duration === "d" && <Box id="volume-d" />}
+        {duration === "w" && <Box id="volume-w" />}
+        {duration === "M" && <Box id="volume-M" />}
+      </Box>
     </Box>
   );
 }

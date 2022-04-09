@@ -8,6 +8,7 @@ import { useLocation, useParams } from "react-router-dom";
 const Layout = ({ children }) => {
   const location = useLocation();
   const { symbol } = useParams();
+
   let pathname = location.pathname.replace(/[-//]/g, " ").split("");
   pathname = pathname.map((char, index) => {
     if (index === 0 || pathname[index - 1] === " ") {

@@ -26,6 +26,10 @@ export const useTopPools = () => {
         return null;
       });
 
+      let link = token[0]?.pool_id
+        ? token[0].pool_id.replace("-", "/")
+        : property.replace("-", "/");
+
       tokens.push({
         image: token[0]?.logoURI ? (
           <Image
@@ -37,10 +41,8 @@ export const useTopPools = () => {
           <Image src={MissingToken} alt={property} className="token-image" />
         ),
         name: (
-          <Link to={`/${property}`} className="token-link">
-            {token[0]?.pool_id
-              ? token[0].pool_id.replace("-", "/")
-              : property.replace("-", "/")}
+          <Link to={`/token-pool/${property}`} className="token-link">
+            {link}
           </Link>
         ),
         tvl: `$${numeral(summary[property]["token_liquidity_usd"]).format(

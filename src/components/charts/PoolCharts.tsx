@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { getHolcPrices, getTokenTVL, getVolumeHistory } from "../../services";
 import { createChart } from "lightweight-charts";
 import numeral from "numeral";
-const dayjs = require("dayjs");
+import dayjs from "dayjs";
 
 export default function PoolCharts({ symbols }) {
   const [current, setCurrent] = useState<string | null>(null);
@@ -247,17 +247,19 @@ export default function PoolCharts({ symbols }) {
         <Divider size="xl" my={3} />
       </Center>
 
-      {metric === "v" && duration === "d" && <Box id="volume-d" />}
-      {metric === "v" && duration === "w" && <Box id="volume-w" />}
-      {metric === "v" && duration === "M" && <Box id="volume-M" />}
+      <Box minH="300px">
+        {metric === "v" && duration === "d" && <Box id="volume-d" />}
+        {metric === "v" && duration === "w" && <Box id="volume-w" />}
+        {metric === "v" && duration === "M" && <Box id="volume-M" />}
 
-      {metric === "l" && duration === "d" && <Box id="liquidity-d" />}
-      {metric === "l" && duration === "w" && <Box id="liquidity-w" />}
-      {metric === "l" && duration === "M" && <Box id="liquidity-M" />}
+        {metric === "l" && duration === "d" && <Box id="liquidity-d" />}
+        {metric === "l" && duration === "w" && <Box id="liquidity-w" />}
+        {metric === "l" && duration === "M" && <Box id="liquidity-M" />}
 
-      {metric === "p" && duration === "d" && <Box id="price-d" />}
-      {metric === "p" && duration === "w" && <Box id="price-w" />}
-      {metric === "p" && duration === "M" && <Box id="price-M" />}
+        {metric === "p" && duration === "d" && <Box id="price-d" />}
+        {metric === "p" && duration === "w" && <Box id="price-w" />}
+        {metric === "p" && duration === "M" && <Box id="price-M" />}
+      </Box>
     </Box>
   );
 }

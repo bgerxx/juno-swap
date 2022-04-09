@@ -7,9 +7,7 @@ import {
 } from "../services";
 import numeral from "numeral";
 
-export default function TokenData({ symbol, tokenList }) {
-  const [name, setName] = useState<string | null>(null);
-  const [logoURI, setLogoURI] = useState<string | null>(null);
+export default function TokenData({ symbol }) {
   const [tvl, setTvl] = useState<string | null>(null);
   const [volume24, setVolume24] = useState<string | null>(null);
   const [volume7, setVolume7] = useState<string | null>(null);
@@ -19,20 +17,6 @@ export default function TokenData({ symbol, tokenList }) {
     const actual24h = await getTokenVolume(symbol);
     const actual7d = await getVolumeHistory(symbol, "7d", "w");
 
-    let token = tokenList.filter((_) => {
-      if (_.symbol === symbol) {
-        return {
-          name: _.name,
-          logoURI: _.logoURI,
-        };
-      }
-
-      return null;
-    });
-
-    setName(token[0]?.name);
-    setLogoURI(token[0]?.logoURI);
-
     let rounded = numeral(actualTvl.liquidity_usd).format("0.00a");
     setTvl(rounded);
 
@@ -41,9 +25,6 @@ export default function TokenData({ symbol, tokenList }) {
 
     rounded = numeral(actual7d[0].volumes).format("0.00a");
     setVolume7(rounded);
-
-    console.log(name);
-    console.log(logoURI);
   }
 
   useEffect(() => {
@@ -51,7 +32,7 @@ export default function TokenData({ symbol, tokenList }) {
       getTokens(symbol);
     }
     // eslint-disable-next-line
-  }, [tvl]);
+  }, [tvl, symbol]);
 
   return (
     <Box>
@@ -61,12 +42,12 @@ export default function TokenData({ symbol, tokenList }) {
         justifyContent="center"
       >
         <Stack
-          spacing={12}
+          spacing={10}
           direction={{ base: "column" }}
           alignItems="left"
           justifyContent="center"
           className="token-table"
-          py={8}
+          p={10}
         >
           <Box textAlign="left">
             <Heading as="h3" size="md" className="token-header">

@@ -105,10 +105,10 @@ export default function Navbar() {
           as="h5"
           fontSize="sm"
           py={1}
-          w={{ xl: "215px" }}
+          w={{ xl: "205px" }}
           textColor={useColorModeValue("purple.400", "purple.600")}
         >
-          JUNO Price: ${price}
+          JUNO Price: ${price.toFixed(2)}
         </Heading>
       </Box>
 

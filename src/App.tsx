@@ -17,7 +17,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="native-token/:symbol" element={<ViewToken />} />
           <Route path="cw-20-token/:symbol" element={<ViewToken />} />
-          <Route path="token-pool/:symbols" element={<ViewPool />} />
+          <Route path="token-pool/:symbol" element={<ViewPool />} />
           <Route path="token-pools" element={<TokenPools />} />
           <Route path="native-tokens" element={<NativeTokens />} />
           <Route path="cw-20-tokens" element={<CW20Tokens />} />
