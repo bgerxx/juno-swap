@@ -177,3 +177,29 @@ export const getCurrentPool = async (poolId: string): Promise<any> => {
 export const getPool24H = async (poolId: string): Promise<TokenVolume> => {
   return (await apiAxios.get(`/volumes/pools/${poolId}/sliding/current`)).data;
 };
+
+// return current liquidity for pool
+export const getPoolLiquidity = async (
+  poolId: string,
+  timeRange: string,
+  granularity: string
+): Promise<TokenVolume> => {
+  return (
+    await apiAxios.get(
+      `/liquidity/pools/historical/${poolId}/${timeRange}/${granularity}`
+    )
+  ).data;
+};
+
+// return current volume for pool
+export const getPoolVolume = async (
+  poolId: string,
+  timeRange: string,
+  granularity: string
+): Promise<TokenVolume> => {
+  return (
+    await apiAxios.get(
+      `/volumes/pools/historical/${poolId}/${timeRange}/${granularity}`
+    )
+  ).data;
+};

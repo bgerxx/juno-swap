@@ -15,11 +15,13 @@ import dayjs from "dayjs";
 export default function TotalLiquidity() {
   const [total, setTotal] = useState<string | null>(null);
   const [duration, setDuration] = useState<string>("d");
+  const [date, setDate] = useState<string>("");
 
   async function getTokens() {
     const summary = await getHistoricalVolume("12M", duration);
     let tokens: any[] = [];
     let volume: number = 0;
+    let day = "";
 
     for (const total in summary) {
       tokens.push({
@@ -28,6 +30,7 @@ export default function TotalLiquidity() {
       });
 
       volume += summary[total].volume_total;
+      day = summary[total].date;
     }
 
     const rounded = numeral(volume).format("0.00a");
@@ -46,6 +49,7 @@ export default function TotalLiquidity() {
 
     areaSeries.setData(tokens);
 
+    setDate(dayjs(day).format("MMM DD, YYYY"));
     setTotal(rounded);
   }
 
@@ -71,6 +75,10 @@ export default function TotalLiquidity() {
 
           <Heading as="h2" size="lg">
             ${total}
+          </Heading>
+
+          <Heading as="h5" size="sm" py={1} color="gray">
+            {date}
           </Heading>
         </Box>
         <Box textAlign="right">

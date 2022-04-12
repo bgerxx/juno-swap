@@ -87,10 +87,6 @@ body {
   overflow: hidden;
 }
 
-.pool-shadow {
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
-}
-
 .token-table h3 {
   text-align: left;
 }
@@ -189,6 +185,31 @@ body {
 }
 
 .token-link {
+  background: #9f7aea;
+  background: -webkit-linear-gradient(
+    to bottom,
+    #9f7aea 0%,
+    #9f7aea 30%,
+    #805ad5 60%,
+    #553c9a 100%
+  );
+  background: -moz-linear-gradient(
+    to bottom,
+    #9f7aea 0%,
+    #9f7aea 30%,
+    #805ad5 60%,
+    #553c9a 100%
+  );
+  background: linear-gradient(
+    to bottom,
+    #9f7aea 0%,
+    #9f7aea 30%,
+    #805ad5 60%,
+    #553c9a 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   letter-spacing: 0.75px;
   font-size: 105%;
 }
@@ -201,6 +222,34 @@ body {
   font-size: 105%;
   font-weight: 500;
   letter-spacing: 0;
+}
+
+.token-header {
+  background: #9f7aea;
+  background: -webkit-linear-gradient(
+    to bottom,
+    #9f7aea 0%,
+    #9f7aea 30%,
+    #805ad5 60%,
+    #553c9a 100%
+  );
+  background: -moz-linear-gradient(
+    to bottom,
+    #9f7aea 0%,
+    #9f7aea 30%,
+    #805ad5 60%,
+    #553c9a 100%
+  );
+  background: linear-gradient(
+    to bottom,
+    #9f7aea 0%,
+    #9f7aea 30%,
+    #805ad5 60%,
+    #553c9a 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .chart-button {

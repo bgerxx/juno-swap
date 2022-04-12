@@ -1,5 +1,4 @@
 import {
-  Badge,
   Button,
   Container,
   Heading,
@@ -10,29 +9,27 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import TokenCharts from "../components/charts/TokenCharts";
 import Layout from "../layout";
 import { getAssets, getCurrentPool } from "../services";
-import numeral from "numeral";
 import { Link } from "react-router-dom";
 import { uniqBy } from "lodash";
 import PoolData from "../components/PoolData";
-import dayjs from "dayjs";
+import PoolCharts from "../components/charts/PoolCharts";
 
 export default function ViewPool() {
   const { symbol } = useParams();
   const [current, setCurrent] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
-  const [date, setDate] = useState<string | null>(null);
-  const [price, setPrice] = useState<string | null>(null);
-  const [tokenType, setTokenType] = useState<boolean>(true);
   const [images, setImages] = useState<string[] | null>(null);
+  const [currentPool, setCurrentPool] = useState<any>([]);
+  const [ratio, setRatio] = useState<number[]>([0, 0]);
+  const symbol1 = symbol?.substring(0, symbol.indexOf("-"));
+  const symbol2 = symbol?.substring(symbol.indexOf("-") + 1);
 
   async function getPool(symbol: string) {
+    const getPool = await getCurrentPool(symbol);
     const assets = await getAssets();
     const tokens = assets.tokens;
-    const poolPrice = await getCurrentPool(symbol);
-    let rounded = numeral(poolPrice.price).format("0.00a");
     let poolList: any[] = [];
     let tokenData: any[] = [];
 
@@ -76,12 +73,13 @@ export default function ViewPool() {
       return null;
     });
 
-    setPrice(rounded);
+    const currentRatio = getPool[symbol].ratio;
+
+    setRatio([(1 / currentRatio).toFixed(2), currentRatio.toFixed(2)]);
     setCurrent(symbol);
     setImages(data[0].logos);
-    setTokenType(data[0].native);
-    setDate(dayjs(data[0].date).format("MMM DD, YYYY"));
     setName(data[0].name);
+    setCurrentPool(getPool);
   }
 
   useEffect(() => {
@@ -99,45 +97,53 @@ export default function ViewPool() {
             <Container minW="80vw" textAlign="left">
               <Stack
                 direction={{ base: "column", xl: "row" }}
-                px={10}
+                px={12}
                 justifyContent="space-between"
               >
                 <VStack>
                   <HStack w="100%">
-                    <Heading as="h3" size="lg" className="token-header">
-                      {current?.replace("-", "/")}
+                    <Heading as="h2" size="lg" className="token-header">
+                      {current?.replace("-", " / ")}
                     </Heading>
-
-                    <Badge
-                      color="white"
-                      bg="black"
-                      px={2}
-                      py={1}
-                      sx={{ borderRadius: 15 }}
-                    >
-                      {tokenType ? "Native" : "CW-20"}
-                    </Badge>
                   </HStack>
 
-                  <HStack w="100%">
+                  <HStack
+                    w="100%"
+                    p={0.5}
+                    bg="gray.100"
+                    borderRadius="15px"
+                    className="pool-shadow"
+                  >
                     <Image
                       src={images[0]}
-                      alt={name}
-                      height="45px"
-                      width="45px"
+                      alt={symbol1}
+                      height="35px"
+                      width="35px"
                       className="chart-image"
                     />
 
+                    <Heading as="h4" size="xs" py={1} ml={3} color="black">
+                      1 {symbol1} = {ratio[0]} {symbol2}
+                    </Heading>
+                  </HStack>
+
+                  <HStack
+                    w="100%"
+                    p={0.5}
+                    bg="gray.100"
+                    borderRadius="15px"
+                    className="pool-shadow"
+                  >
                     <Image
                       src={images[1]}
-                      alt={name}
-                      height="45px"
-                      width="45px"
+                      alt={symbol2}
+                      height="35px"
+                      width="35px"
                       className="chart-image"
                     />
 
-                    <Heading as="h2" size="xl" py={1} ml={3}>
-                      ${price}
+                    <Heading as="h4" size="xs" py={1} ml={3} color="black">
+                      1 {symbol2} = {ratio[1]} {symbol1}
                     </Heading>
                   </HStack>
                 </VStack>
@@ -167,12 +173,16 @@ export default function ViewPool() {
                 pt={6}
               >
                 <Container maxW={{ base: "100vw", xl: "20vw" }}>
-                  {current && <PoolData poolId={current} />}
+                  {current && images && (
+                    <PoolData
+                      poolId={current}
+                      images={images}
+                      currentPool={currentPool}
+                    />
+                  )}
                 </Container>
                 <Container maxW={{ base: "100vw", xl: "60vw" }}>
-                  {current && date && (
-                    <TokenCharts symbol={current} date={date} />
-                  )}
+                  {current && <PoolCharts symbol={current} />}
                 </Container>
               </Stack>
             </Container>

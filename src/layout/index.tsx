@@ -23,7 +23,9 @@ const Layout = ({ children }) => {
     <Box>
       <Helmet>
         <title>
-          {symbol ? `${symbol}  | JunoSwap` : `${pageTitle}  | JunoSwap`}
+          {symbol
+            ? `${symbol.replace("-", " / ")}  | JunoSwap`
+            : `${pageTitle}  | JunoSwap`}
         </title>
       </Helmet>
 

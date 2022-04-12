@@ -50,7 +50,12 @@ export default function TokenData({ symbol }) {
           p={10}
         >
           <Box textAlign="left">
-            <Heading as="h3" size="md" className="token-header">
+            <Heading
+              as="h3"
+              size="md"
+              className="token-header"
+              color="purple.500"
+            >
               TVL
             </Heading>
 
@@ -62,7 +67,12 @@ export default function TokenData({ symbol }) {
           <Divider />
 
           <Box textAlign="left">
-            <Heading as="h3" size="md" className="token-header">
+            <Heading
+              as="h3"
+              size="md"
+              className="token-header"
+              color="purple.500"
+            >
               24H Trading Volume
             </Heading>
 
@@ -74,7 +84,12 @@ export default function TokenData({ symbol }) {
           <Divider />
 
           <Box textAlign="left">
-            <Heading as="h3" size="md" className="token-header">
+            <Heading
+              as="h3"
+              size="md"
+              className="token-header"
+              color="purple.500"
+            >
               7D Trading Volume
             </Heading>
 

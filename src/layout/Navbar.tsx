@@ -100,6 +100,7 @@ export default function Navbar() {
         zIndex={10}
         textAlign={{ base: "center", xl: "right" }}
         bg={useColorModeValue("gray.900", "gray.100")}
+        className="pool-shadow"
       >
         <Heading
           as="h5"
@@ -119,6 +120,7 @@ export default function Navbar() {
         px={3}
         pt={6}
         bg={useColorModeValue("gray.100", "gray.900")}
+        className="pool-shadow"
       >
         <IconButton
           size={"md"}
@@ -154,6 +156,7 @@ export default function Navbar() {
       <Box
         display={{ xl: "none" }}
         bg={useColorModeValue("gray.100", "gray.900")}
+        className="pool-shadow"
       >
         {isOpen ? (
           <Stack as={"nav"} spacing={4} mb={4}>

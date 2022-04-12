@@ -5,28 +5,28 @@ import {
   Divider,
   Heading,
   HStack,
+  Stack,
+  useColorModeValue,
+  VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { getHolcPrices, getTokenTVL, getVolumeHistory } from "../../services";
+import { getPoolLiquidity, getPoolVolume } from "../../services";
 import { createChart } from "lightweight-charts";
 import numeral from "numeral";
 import dayjs from "dayjs";
 
-export default function PoolCharts({ symbols }) {
+export default function PoolCharts({ symbol }) {
   const [current, setCurrent] = useState<string | null>(null);
-  const [heading, setHeading] = useState<string>("Volume 24H");
-  const [headingColor, setHeadingColor] =
-    useState<string>("rgba(49,130,206,1)");
+  const [date, setDate] = useState<string | null>(null);
   const [total, setTotal] = useState<string | null>(null);
   const [metric, setMetric] = useState<string>("v");
   const [duration, setDuration] = useState<string>("d");
 
-  async function getVolume(symbols: string) {
-    setHeading("Volume 24H");
-    setHeadingColor("rgba(49,130,206,1)");
-    const summary = await getVolumeHistory(symbols, "12M", duration);
+  async function getVolume(symbol: string) {
+    const summary = await getPoolVolume(symbol, "12M", duration);
     let tokens: any[] = [];
     let volume: number = 0;
+    let day = "";
 
     for (const total in summary) {
       tokens.push({
@@ -34,7 +34,8 @@ export default function PoolCharts({ symbols }) {
         value: summary[total].volumes,
       });
 
-      volume += summary[total].volumes;
+      day = summary[total].date;
+      volume = summary[total].volumes;
     }
 
     const rounded = numeral(volume).format("0.00a");
@@ -53,23 +54,24 @@ export default function PoolCharts({ symbols }) {
 
     histogramSeries.setData(tokens);
 
+    setDate(dayjs(day).format("MMM DD, YYYY"));
     setTotal(rounded);
   }
 
   async function getLiquidity(current: string) {
-    setHeading("TVL");
-    setHeadingColor("rgba(229,62,62,1)");
-    const summary = await getTokenTVL(current, "12M", duration);
+    const summary = await getPoolLiquidity(current, "12M", duration);
     let tokens: any[] = [];
     let liquidity: number = 0;
+    let day = "";
 
     for (const total in summary) {
       tokens.push({
         time: dayjs(summary[total].date).format("YYYY-MM-DD"),
-        value: summary[total].liquidity,
+        value: summary[total].total_liquidity,
       });
 
-      liquidity += summary[total].liquidity;
+      day = summary[total].date;
+      liquidity = summary[total].total_liquidity;
     }
 
     const rounded = numeral(liquidity).format("0.00a");
@@ -90,31 +92,29 @@ export default function PoolCharts({ symbols }) {
 
     areaSeries.setData(tokens);
 
+    setDate(dayjs(day).format("MMM DD, YYYY"));
     setTotal(rounded);
   }
 
-  async function getPrice(current: string) {
-    setHeading("Price");
-    setHeadingColor("rgba(56,161,105,1)");
-    const summary = await getHolcPrices(current, "12M", duration);
+  async function getRatio(current: string) {
+    const summary = await getPoolLiquidity(current, "12M", duration);
     let tokens: any[] = [];
-    let liquidity: number = 0;
+    let ratio: number = 0;
+    let day = "";
 
     for (const total in summary) {
       tokens.push({
         time: dayjs(summary[total].date).format("YYYY-MM-DD"),
-        open: summary[total].open,
-        high: summary[total].max,
-        low: summary[total].min,
-        close: summary[total].close,
+        value: summary[total].ratio,
       });
 
-      liquidity += summary[total].max;
+      day = summary[total].date;
+      ratio = summary[total].ratio;
     }
 
-    const rounded = numeral(liquidity).format("0.00a");
+    const rounded = numeral(ratio).format("0.00a");
 
-    const chart = createChart(`price-${duration}`, {
+    const chart = createChart(`ratio-${duration}`, {
       layout: {
         background: { color: "transparent" },
         textColor: "rgba(56,161,105,1)",
@@ -122,22 +122,22 @@ export default function PoolCharts({ symbols }) {
       height: 300,
     });
 
-    const candlestickSeries = chart.addCandlestickSeries({
-      upColor: "rgba(56,161,105,0.5)",
-      downColor: "rgba(229,62,62,0.5)",
+    const lineSeries = chart.addLineSeries({
+      color: "rgba(56,161,105,1)",
     });
 
-    candlestickSeries.setData(tokens);
+    lineSeries.setData(tokens);
 
+    setDate(dayjs(day).format("MMM DD, YYYY"));
     setTotal(rounded);
   }
 
   useEffect(() => {
-    if (symbols) {
-      setCurrent(symbols);
+    if (symbol) {
+      setCurrent(symbol);
       setTotal(null);
     }
-  }, [symbols]);
+  }, [symbol]);
 
   useEffect(() => {
     if (!total && current) {
@@ -150,8 +150,8 @@ export default function PoolCharts({ symbols }) {
           getLiquidity(current);
           break;
 
-        case "p":
-          getPrice(current);
+        case "r":
+          getRatio(current);
           break;
       }
     }
@@ -169,79 +169,125 @@ export default function PoolCharts({ symbols }) {
   }
 
   return (
-    <Box p={6} className="token-table" minHeight={535}>
-      <Box textAlign="left" display={{ base: "block", xl: "none" }} pb={3}>
-        <Heading as="h3" size="md" color={headingColor}>
-          {heading}
-        </Heading>
-
-        <Heading as="h2" size="xl" py={1}>
-          ${total}
-        </Heading>
-      </Box>
-
-      <HStack justifyContent={{ base: "right", xl: "space-between" }} py={4}>
+    <Box p={6} className="token-table">
+      <Stack
+        direction={{ base: "column", xl: "row" }}
+        justifyContent={{ base: "center", xl: "space-between" }}
+        alignItems="center"
+      >
         <Box textAlign="left" display={{ base: "none", xl: "block" }}>
-          <Heading as="h3" size="md" color={headingColor}>
-            {heading}
+          <Heading as="h2" size="xl">
+            ${total}
           </Heading>
 
+          <Heading as="h5" size="sm" color="gray">
+            {date}
+          </Heading>
+        </Box>
+
+        <VStack textAlign="center" display={{ base: "block", xl: "none" }}>
           <Heading as="h2" size="xl" py={1}>
             ${total}
           </Heading>
-        </Box>
 
-        <Box textAlign="right">
-          <Button
-            fontSize="sm"
-            disabled={metric === "v"}
-            onClick={() => handleMetric("v")}
+          <Heading as="h5" size="sm" py={1} color="gray">
+            {date}
+          </Heading>
+        </VStack>
+
+        <VStack
+          justifyContent={{ base: "center", xl: "right" }}
+          py={{ base: 0, xl: 0 }}
+        >
+          <HStack
+            sx={{ borderRadius: 15 }}
+            justifyContent="space-between"
+            bg={useColorModeValue("gray.300", "gray.700")}
+            p={0}
+            m={0}
           >
-            Volume
-          </Button>
-          <Button
-            fontSize="sm"
-            disabled={metric === "l"}
-            onClick={() => handleMetric("l")}
-            mx={3}
+            <Button
+              fontSize="xs"
+              disabled={metric === "v"}
+              onClick={() => handleMetric("v")}
+              sx={{ borderRadius: 15 }}
+              bg={useColorModeValue("gray.300", "gray.700")}
+              color={useColorModeValue("black", "white")}
+              _hover={{ bg: useColorModeValue("white", "black") }}
+              _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
+            >
+              Volume
+            </Button>
+            <Button
+              fontSize="xs"
+              disabled={metric === "l"}
+              onClick={() => handleMetric("l")}
+              bg={useColorModeValue("gray.300", "gray.700")}
+              _hover={{ bg: useColorModeValue("white", "black") }}
+              _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
+            >
+              TVL
+            </Button>
+            <Button
+              fontSize="xs"
+              disabled={metric === "r"}
+              onClick={() => handleMetric("r")}
+              bg={useColorModeValue("gray.300", "gray.700")}
+              color={useColorModeValue("black", "white")}
+              _hover={{ bg: useColorModeValue("white", "black") }}
+              _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
+            >
+              Ratio
+            </Button>
+          </HStack>
+
+          <HStack
+            sx={{ borderRadius: 15 }}
+            justifyContent="space-between"
+            bg={useColorModeValue("gray.300", "gray.700")}
+            p={0}
+            m={0}
           >
-            TVL
-          </Button>
-          <Button
-            fontSize="sm"
-            disabled={metric === "p"}
-            onClick={() => handleMetric("p")}
-          >
-            Price
-          </Button>
-        </Box>
-      </HStack>
-      <HStack justifyContent="right" py={3}>
-        <Box textAlign="right">
-          <Button
-            fontSize="sm"
-            disabled={duration === "d"}
-            onClick={() => handleDuration("d")}
-          >
-            Day
-          </Button>
-          <Button
-            fontSize="sm"
-            disabled={duration === "w"}
-            onClick={() => handleDuration("w")}
-            mx={3}
-          >
-            Week
-          </Button>
-          <Button
-            fontSize="sm"
-            disabled={duration === "M"}
-            onClick={() => handleDuration("M")}
-          >
-            Month
-          </Button>
-        </Box>
-      </HStack>
+            <Button
+              fontSize="xs"
+              disabled={duration === "d"}
+              onClick={() => handleDuration("d")}
+              bg={useColorModeValue("gray.300", "gray.700")}
+              _hover={{ bg: useColorModeValue("white", "black") }}
+              _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
+            >
+              D
+            </Button>
+            <Button
+              fontSize="xs"
+              disabled={duration === "w"}
+              onClick={() => handleDuration("w")}
+              bg={useColorModeValue("gray.300", "gray.700")}
+              color={useColorModeValue("black", "white")}
+              _hover={{ bg: useColorModeValue("white", "black") }}
+              _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
+            >
+              W
+            </Button>
+            <Button
+              fontSize="xs"
+              disabled={duration === "M"}
+              onClick={() => handleDuration("M")}
+              bg={useColorModeValue("gray.300", "gray.700")}
+              _hover={{ bg: useColorModeValue("white", "black") }}
+              _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
+            >
+              M
+            </Button>
+          </HStack>
+        </VStack>
+      </Stack>
 
       <Center height="25px">
         <Divider size="xl" my={3} />
@@ -256,9 +302,9 @@ export default function PoolCharts({ symbols }) {
         {metric === "l" && duration === "w" && <Box id="liquidity-w" />}
         {metric === "l" && duration === "M" && <Box id="liquidity-M" />}
 
-        {metric === "p" && duration === "d" && <Box id="price-d" />}
-        {metric === "p" && duration === "w" && <Box id="price-w" />}
-        {metric === "p" && duration === "M" && <Box id="price-M" />}
+        {metric === "r" && duration === "d" && <Box id="ratio-d" />}
+        {metric === "r" && duration === "w" && <Box id="ratio-w" />}
+        {metric === "r" && duration === "M" && <Box id="ratio-M" />}
       </Box>
     </Box>
   );

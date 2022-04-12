@@ -16,13 +16,11 @@ import { getAssets, getCurrentPrice } from "../services";
 import TokenData from "../components/TokenData";
 import numeral from "numeral";
 import { Link } from "react-router-dom";
-import dayjs from "dayjs";
 
 export default function ViewPool() {
   const { symbol } = useParams();
   const [current, setCurrent] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
-  const [date, setDate] = useState<string | null>(null);
   const [price, setPrice] = useState<string | null>(null);
   const [tokenType, setTokenType] = useState<boolean>(true);
   const [image, setImage] = useState<any>(null);
@@ -50,7 +48,6 @@ export default function ViewPool() {
     setCurrent(symbol);
     setImage(data[0].logoURI);
     setTokenType(data[0].native);
-    setDate(dayjs(data[0].date).format("MMM DD, YYYY"));
     setName(data[0]?.name);
   }
 
@@ -136,9 +133,7 @@ export default function ViewPool() {
                   {current && <TokenData symbol={current} />}
                 </Container>
                 <Container maxW={{ base: "100vw", xl: "60vw" }}>
-                  {current && date && (
-                    <TokenCharts symbol={current} date={date} />
-                  )}
+                  {current && <TokenCharts symbol={current} />}
                 </Container>
               </Stack>
             </Container>

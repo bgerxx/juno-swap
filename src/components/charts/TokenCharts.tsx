@@ -15,9 +15,9 @@ import { createChart } from "lightweight-charts";
 import numeral from "numeral";
 import dayjs from "dayjs";
 
-export default function TokenCharts({ symbol, date }) {
+export default function TokenCharts({ symbol }) {
   const [current, setCurrent] = useState<string | null>(null);
-
+  const [date, setDate] = useState<string | null>(null);
   const [total, setTotal] = useState<string | null>(null);
   const [metric, setMetric] = useState<string>("v");
   const [duration, setDuration] = useState<string>("d");
@@ -26,6 +26,7 @@ export default function TokenCharts({ symbol, date }) {
     const summary = await getVolumeHistory(symbol, "12M", duration);
     let tokens: any[] = [];
     let volume: number = 0;
+    let day = "";
 
     for (const total in summary) {
       tokens.push({
@@ -33,7 +34,8 @@ export default function TokenCharts({ symbol, date }) {
         value: summary[total].volumes,
       });
 
-      volume += summary[total].volumes;
+      day = summary[total].date;
+      volume = summary[total].volumes;
     }
 
     const rounded = numeral(volume).format("0.00a");
@@ -52,6 +54,7 @@ export default function TokenCharts({ symbol, date }) {
 
     histogramSeries.setData(tokens);
 
+    setDate(dayjs(day).format("MMM DD, YYYY"));
     setTotal(rounded);
   }
 
@@ -59,6 +62,7 @@ export default function TokenCharts({ symbol, date }) {
     const summary = await getTokenTVL(current, "12M", duration);
     let tokens: any[] = [];
     let liquidity: number = 0;
+    let day = "";
 
     for (const total in summary) {
       tokens.push({
@@ -66,7 +70,8 @@ export default function TokenCharts({ symbol, date }) {
         value: summary[total].liquidity,
       });
 
-      liquidity += summary[total].liquidity;
+      day = summary[total].date;
+      liquidity = summary[total].liquidity;
     }
 
     const rounded = numeral(liquidity).format("0.00a");
@@ -87,13 +92,14 @@ export default function TokenCharts({ symbol, date }) {
 
     areaSeries.setData(tokens);
 
+    setDate(dayjs(day).format("MMM DD, YYYY"));
     setTotal(rounded);
   }
 
   async function getPrice(current: string) {
     const summary = await getHolcPrices(current, "12M", duration);
     let tokens: any[] = [];
-    let liquidity: number = 0;
+    let day = "";
 
     for (const total in summary) {
       tokens.push({
@@ -104,10 +110,10 @@ export default function TokenCharts({ symbol, date }) {
         close: summary[total].close,
       });
 
-      liquidity += summary[total].max;
+      day = summary[total].date;
     }
 
-    const rounded = numeral(liquidity).format("0.00a");
+    const rounded = numeral(tokens[tokens.length - 1].close).format("0.00a");
 
     const chart = createChart(`price-${duration}`, {
       layout: {
@@ -124,6 +130,7 @@ export default function TokenCharts({ symbol, date }) {
 
     candlestickSeries.setData(tokens);
 
+    setDate(dayjs(day).format("MMM DD, YYYY"));
     setTotal(rounded);
   }
 

@@ -113,7 +113,7 @@ export default function TokenSearch({ position }) {
           </Box>
 
           <Text size="m" float="right">
-            {item.name}
+            {item.name.replace("-", " / ")}
           </Text>
         </Box>
       </Box>
@@ -122,31 +122,16 @@ export default function TokenSearch({ position }) {
 
   return (
     <Container className="token-search-bar" sx={{ position: position }} py={4}>
-      {tokenList[0] && (
-        <ReactSearchAutocomplete
-          items={tokenList}
-          onSearch={handleOnSearch}
-          onHover={handleOnHover}
-          onSelect={handleOnSelect}
-          onFocus={handleOnFocus}
-          showIcon={false}
-          formatResult={formatResult}
-          placeholder="Search pools or tokens"
-        />
-      )}
-
-      {!tokenList[0] && (
-        <ReactSearchAutocomplete
-          items={tokenList}
-          onSearch={handleOnSearch}
-          onHover={handleOnHover}
-          onSelect={handleOnSelect}
-          onFocus={handleOnFocus}
-          showIcon={false}
-          formatResult={formatResult}
-          placeholder="Search pools or tokens"
-        />
-      )}
+      <ReactSearchAutocomplete
+        items={tokenList}
+        onSearch={handleOnSearch}
+        onHover={handleOnHover}
+        onSelect={handleOnSelect}
+        onFocus={handleOnFocus}
+        showIcon={false}
+        formatResult={tokenList[0] && formatResult}
+        placeholder="Search pools or tokens"
+      />
     </Container>
   );
 }
