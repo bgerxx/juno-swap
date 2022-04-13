@@ -203,3 +203,16 @@ export const getPoolVolume = async (
     )
   ).data;
 };
+
+// return current ratio for pool
+export const getPoolRatio = async (
+  poolId: string,
+  timeRange: string,
+  granularity: string
+): Promise<TokenVolume> => {
+  return (
+    await apiAxios.get(
+      `/liquidity/pools/historical/holc/${poolId}/${timeRange}/${granularity}`
+    )
+  ).data;
+};

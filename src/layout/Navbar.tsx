@@ -106,14 +106,14 @@ export default function Navbar() {
           as="h5"
           fontSize="sm"
           py={1}
-          w={{ xl: "205px" }}
+          w={{ xl: "255px" }}
           textColor={useColorModeValue("purple.400", "purple.600")}
         >
           JUNO Price: ${price.toFixed(2)}
         </Heading>
       </Box>
 
-      <Flex
+      <HStack
         h={24}
         alignItems={"center"}
         justifyContent={"space-between"}
@@ -130,7 +130,7 @@ export default function Navbar() {
           onClick={isOpen ? onClose : onOpen}
         />
         <HStack spacing={1} alignItems={"center"}>
-          <Box mr={3}>
+          <Box mr={{ xl: 4 }} ml={{ base: 8 }}>
             <Link to="/" className="logo">
               <Image src={Logo} w="47px" h="36px" />
             </Link>
@@ -142,16 +142,23 @@ export default function Navbar() {
               </NavItem>
             ))}
           </HStack>
-
-          <HStack as={"nav"} display={{ base: "none", xl: "flex" }}>
-            <TokenSearch position="absolute" />
-          </HStack>
         </HStack>
 
-        <Flex alignItems={"center"} mr={{ xl: 4 }}>
-          <ColorModeSwitcher />
-        </Flex>
-      </Flex>
+        <HStack>
+          <Flex
+            alignItems={"center"}
+            mr={{ xl: 4 }}
+            minW="500px"
+            display={{ base: "none", xl: "flex" }}
+          >
+            <TokenSearch position="relative" />
+          </Flex>
+
+          <Flex alignItems={"center"} mr={{ xl: 4 }} minW={{ xl: "100px" }}>
+            <ColorModeSwitcher />
+          </Flex>
+        </HStack>
+      </HStack>
 
       <Box
         display={{ xl: "none" }}

@@ -10,7 +10,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { getPoolLiquidity, getPoolVolume } from "../../services";
+import { getPoolLiquidity, getPoolRatio, getPoolVolume } from "../../services";
 import { createChart } from "lightweight-charts";
 import numeral from "numeral";
 import dayjs from "dayjs";
@@ -19,7 +19,7 @@ export default function PoolCharts({ symbol }) {
   const [current, setCurrent] = useState<string | null>(null);
   const [date, setDate] = useState<string | null>(null);
   const [total, setTotal] = useState<string | null>(null);
-  const [metric, setMetric] = useState<string>("v");
+  const [metric, setMetric] = useState<string>("r");
   const [duration, setDuration] = useState<string>("d");
 
   async function getVolume(symbol: string) {
@@ -101,22 +101,23 @@ export default function PoolCharts({ symbol }) {
   }
 
   async function getRatio(current: string) {
-    const summary = await getPoolLiquidity(current, "12M", duration);
+    const summary = await getPoolRatio(current, "12M", duration);
     let tokens: any[] = [];
-    let ratio: number = 0;
     let day = "";
 
     for (const total in summary) {
       tokens.push({
         time: dayjs(summary[total].date).format("YYYY-MM-DD"),
-        value: summary[total].ratio,
+        open: summary[total].open,
+        high: summary[total].max,
+        low: summary[total].min,
+        close: summary[total].close,
       });
 
       day = summary[total].date;
-      ratio = summary[total].ratio;
     }
 
-    const rounded = numeral(ratio).format("0.00a");
+    const rounded = numeral(tokens[tokens.length - 1].close).format("0.00a");
 
     const chart = createChart(`ratio-${duration}`, {
       layout: {
@@ -128,11 +129,12 @@ export default function PoolCharts({ symbol }) {
 
     chart.timeScale().fitContent();
 
-    const lineSeries = chart.addLineSeries({
-      color: "rgba(56,161,105,1)",
+    const candlestickSeries = chart.addCandlestickSeries({
+      upColor: "rgba(56,161,105,0.5)",
+      downColor: "rgba(229,62,62,0.5)",
     });
 
-    lineSeries.setData(tokens);
+    candlestickSeries.setData(tokens);
 
     setDate(dayjs(day).format("MMM DD, YYYY"));
     setTotal(rounded);
@@ -214,16 +216,15 @@ export default function PoolCharts({ symbol }) {
           >
             <Button
               fontSize="xs"
-              disabled={metric === "v"}
-              onClick={() => handleMetric("v")}
-              sx={{ borderRadius: 15 }}
+              disabled={metric === "r"}
+              onClick={() => handleMetric("r")}
               bg={useColorModeValue("gray.300", "gray.700")}
               color={useColorModeValue("black", "white")}
               _hover={{ bg: useColorModeValue("white", "black") }}
               _disabled={{ bg: useColorModeValue("white", "black") }}
               className="chart-button"
             >
-              Volume
+              Ratio
             </Button>
             <Button
               fontSize="xs"
@@ -238,15 +239,16 @@ export default function PoolCharts({ symbol }) {
             </Button>
             <Button
               fontSize="xs"
-              disabled={metric === "r"}
-              onClick={() => handleMetric("r")}
+              disabled={metric === "v"}
+              onClick={() => handleMetric("v")}
+              sx={{ borderRadius: 15 }}
               bg={useColorModeValue("gray.300", "gray.700")}
               color={useColorModeValue("black", "white")}
               _hover={{ bg: useColorModeValue("white", "black") }}
               _disabled={{ bg: useColorModeValue("white", "black") }}
               className="chart-button"
             >
-              Ratio
+              Volume
             </Button>
           </HStack>
 
