@@ -5,6 +5,7 @@ import {
   Divider,
   Heading,
   HStack,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getHistoricalVolume } from "../../services";
@@ -29,7 +30,7 @@ export default function TotalLiquidity() {
         value: summary[total].volume_total,
       });
 
-      volume += summary[total].volume_total;
+      volume = summary[total].volume_total;
       day = summary[total].date;
     }
 
@@ -42,6 +43,8 @@ export default function TotalLiquidity() {
       },
       height: 300,
     });
+
+    chart.timeScale().fitContent();
 
     const areaSeries = chart.addHistogramSeries({
       color: "rgba(49,130,206,0.8)",
@@ -82,25 +85,48 @@ export default function TotalLiquidity() {
           </Heading>
         </Box>
         <Box textAlign="right">
-          <Button
-            disabled={duration === "d"}
-            onClick={() => handleDuration("d")}
+          <HStack
+            sx={{ borderRadius: 15 }}
+            justifyContent="space-between"
+            bg={useColorModeValue("gray.300", "gray.700")}
+            p={0}
+            m={0}
           >
-            D
-          </Button>
-          <Button
-            disabled={duration === "w"}
-            onClick={() => handleDuration("w")}
-            mx={3}
-          >
-            W
-          </Button>
-          <Button
-            disabled={duration === "M"}
-            onClick={() => handleDuration("M")}
-          >
-            M
-          </Button>
+            <Button
+              fontSize="xs"
+              disabled={duration === "d"}
+              onClick={() => handleDuration("d")}
+              bg={useColorModeValue("gray.300", "gray.700")}
+              _hover={{ bg: useColorModeValue("white", "black") }}
+              _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
+            >
+              D
+            </Button>
+            <Button
+              fontSize="xs"
+              disabled={duration === "w"}
+              onClick={() => handleDuration("w")}
+              bg={useColorModeValue("gray.300", "gray.700")}
+              color={useColorModeValue("black", "white")}
+              _hover={{ bg: useColorModeValue("white", "black") }}
+              _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
+            >
+              W
+            </Button>
+            <Button
+              fontSize="xs"
+              disabled={duration === "M"}
+              onClick={() => handleDuration("M")}
+              bg={useColorModeValue("gray.300", "gray.700")}
+              _hover={{ bg: useColorModeValue("white", "black") }}
+              _disabled={{ bg: useColorModeValue("white", "black") }}
+              className="chart-button"
+            >
+              M
+            </Button>
+          </HStack>
         </Box>
       </HStack>
 

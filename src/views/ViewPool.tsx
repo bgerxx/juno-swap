@@ -25,6 +25,7 @@ export default function ViewPool() {
   const [ratio, setRatio] = useState<number[]>([0, 0]);
   const symbol1 = symbol?.substring(0, symbol.indexOf("-"));
   const symbol2 = symbol?.substring(symbol.indexOf("-") + 1);
+  const [swap, setSwap] = useState<boolean>(false);
 
   async function getPool(symbol: string) {
     const getPool = await getCurrentPool(symbol);
@@ -100,52 +101,70 @@ export default function ViewPool() {
                 px={12}
                 justifyContent="space-between"
               >
-                <VStack>
+                <VStack spacing={4}>
                   <HStack w="100%">
                     <Heading as="h2" size="lg" className="token-header">
                       {current?.replace("-", " / ")}
                     </Heading>
                   </HStack>
 
-                  <HStack
-                    w="100%"
-                    p={0.5}
-                    bg="gray.100"
-                    borderRadius="15px"
-                    className="pool-shadow"
-                  >
-                    <Image
-                      src={images[0]}
-                      alt={symbol1}
-                      height="35px"
-                      width="35px"
-                      className="chart-image"
-                    />
+                  <Stack w="100%" direction={{ base: "column", xl: "row" }}>
+                    {!swap && (
+                      <HStack
+                        w="max-content"
+                        p={1}
+                        bg="gray.100"
+                        borderRadius="15px"
+                        className="pool-shadow"
+                      >
+                        <Image
+                          src={images[0]}
+                          alt={symbol1}
+                          height="35px"
+                          width="35px"
+                          className="chart-image"
+                        />
 
-                    <Heading as="h4" size="xs" py={1} ml={3} color="black">
-                      1 {symbol1} = {ratio[0]} {symbol2}
-                    </Heading>
-                  </HStack>
+                        <Heading as="h4" size="xs" py={1} ml={3} color="black">
+                          1 {symbol1} = {ratio[0]} {symbol2}
+                        </Heading>
+                      </HStack>
+                    )}
 
-                  <HStack
-                    w="100%"
-                    p={0.5}
-                    bg="gray.100"
-                    borderRadius="15px"
-                    className="pool-shadow"
-                  >
-                    <Image
-                      src={images[1]}
-                      alt={symbol2}
-                      height="35px"
-                      width="35px"
-                      className="chart-image"
-                    />
+                    {swap && (
+                      <HStack
+                        w="max-content"
+                        p={1}
+                        bg="gray.100"
+                        borderRadius="15px"
+                        className="pool-shadow"
+                      >
+                        <Image
+                          src={images[1]}
+                          alt={symbol2}
+                          height="35px"
+                          width="35px"
+                          className="chart-image"
+                        />
 
-                    <Heading as="h4" size="xs" py={1} ml={3} color="black">
-                      1 {symbol2} = {ratio[1]} {symbol1}
-                    </Heading>
-                  </HStack>
+                        <Heading as="h4" size="xs" py={1} ml={3} color="black">
+                          1 {symbol2} = {ratio[1]} {symbol1}
+                        </Heading>
+                      </HStack>
+                    )}
+
+                    <HStack w="max-content" p={1}>
+                      <Button
+                        colorScheme="purple"
+                        variant="outline"
+                        onClick={() => {
+                          setSwap(!swap);
+                        }}
+                      >
+                        <i className="fas fa-arrows-alt-h" />
+                      </Button>
+                    </HStack>
+                  </Stack>
                 </VStack>
 
                 <VStack>
@@ -170,7 +189,7 @@ export default function ViewPool() {
               <Stack
                 direction={{ base: "column", xl: "row" }}
                 spacing={{ base: 6, xl: 2 }}
-                pt={6}
+                pt={4}
               >
                 <Container maxW={{ base: "100vw", xl: "20vw" }}>
                   {current && images && (

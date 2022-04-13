@@ -48,6 +48,8 @@ export default function PoolCharts({ symbol }) {
       height: 300,
     });
 
+    chart.timeScale().fitContent();
+
     const histogramSeries = chart.addHistogramSeries({
       color: "rgba(49,130,206,0.8)",
     });
@@ -83,6 +85,8 @@ export default function PoolCharts({ symbol }) {
       },
       height: 300,
     });
+
+    chart.timeScale().fitContent();
 
     const areaSeries = chart.addAreaSeries({
       lineColor: "rgba(229,62,62,1)",
@@ -121,6 +125,8 @@ export default function PoolCharts({ symbol }) {
       },
       height: 300,
     });
+
+    chart.timeScale().fitContent();
 
     const lineSeries = chart.addLineSeries({
       color: "rgba(56,161,105,1)",

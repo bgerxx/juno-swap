@@ -74,7 +74,7 @@ export default function TopPools({ data }) {
     <Box className="token-table">
       <HStack pb={3} justifyContent="space-between">
         <Heading as="h3" size="lg" className="token-header">
-          Top Token Pools
+          Top Pools
         </Heading>
         {path === "/" && (
           <Link to="/token-pools">
@@ -83,7 +83,7 @@ export default function TopPools({ data }) {
         )}
       </HStack>
 
-      <TableContainer m={5}>
+      <TableContainer m={5} minH="575px">
         <Table
           {...getTableProps()}
           colorScheme="purple"
@@ -145,7 +145,6 @@ export default function TopPools({ data }) {
       <Box className="button-group" alignItems="center">
         <Button
           float="left"
-          leftIcon={<i arai-label="previous" className="fa fa-chevron-left" />}
           colorScheme="purple"
           variant="ghost"
           onClick={() => {
@@ -153,7 +152,9 @@ export default function TopPools({ data }) {
           }}
           disabled={!canPreviousPage}
           mr={3}
-        ></Button>
+        >
+          <i arai-label="previous" className="fa fa-chevron-left" />
+        </Button>
 
         <Text fontSize="md" display={{ base: "none", xl: "block" }}>
           Page: {pageIndex + 1} of {pageOptions.length}
@@ -161,7 +162,6 @@ export default function TopPools({ data }) {
 
         <Button
           float="right"
-          rightIcon={<i arai-label="next" className="fa fa-chevron-right" />}
           colorScheme="purple"
           variant="ghost"
           onClick={() => {
@@ -169,7 +169,9 @@ export default function TopPools({ data }) {
           }}
           disabled={!canNextPage}
           ml={3}
-        ></Button>
+        >
+          <i arai-label="next" className="fa fa-chevron-right" />
+        </Button>
       </Box>
     </Box>
   );

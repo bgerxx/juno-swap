@@ -1,4 +1,4 @@
-import { Box, Container, Img, Text } from "@chakra-ui/react";
+import { Box, Container, Image, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { getAssets, getTopPools } from "../services";
@@ -93,7 +93,7 @@ export default function TokenSearch({ position }) {
       <Box w="100%" className="search-result">
         <Box maxW="300px">
           <Box>
-            <Img
+            <Image
               src={item.logos[0]}
               alt={item.name}
               height={30}
@@ -102,7 +102,7 @@ export default function TokenSearch({ position }) {
             />
 
             {item.logos[1] && (
-              <Img
+              <Image
                 src={item.logos[1]}
                 alt={item.name}
                 height={30}
