@@ -17,7 +17,7 @@ import TokenData from "../components/TokenData";
 import numeral from "numeral";
 import { Link } from "react-router-dom";
 
-export default function ViewPool() {
+export default function ViewToken() {
   const { symbol } = useParams();
   const [current, setCurrent] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
