@@ -169,7 +169,7 @@ export default function ViewPool() {
 
                 <VStack>
                   <HStack w="100%">
-                    <Link to="/">
+                    <Link to="/token-pools">
                       <Button>
                         <i
                           className="fas fa-download"

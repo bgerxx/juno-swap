@@ -19,7 +19,7 @@ export default function TokenCharts({ symbol }) {
   const [current, setCurrent] = useState<string | null>(null);
   const [date, setDate] = useState<string | null>(null);
   const [total, setTotal] = useState<string | null>(null);
-  const [metric, setMetric] = useState<string>("v");
+  const [metric, setMetric] = useState<string>("p");
   const [duration, setDuration] = useState<string>("d");
 
   async function getVolume(symbol: string) {
@@ -216,16 +216,15 @@ export default function TokenCharts({ symbol }) {
           >
             <Button
               fontSize="xs"
-              disabled={metric === "v"}
-              onClick={() => handleMetric("v")}
-              sx={{ borderRadius: 15 }}
+              disabled={metric === "p"}
+              onClick={() => handleMetric("p")}
               bg={useColorModeValue("gray.300", "gray.700")}
               color={useColorModeValue("black", "white")}
               _hover={{ bg: useColorModeValue("white", "black") }}
               _disabled={{ bg: useColorModeValue("white", "black") }}
               className="chart-button"
             >
-              Volume
+              Price
             </Button>
             <Button
               fontSize="xs"
@@ -240,15 +239,16 @@ export default function TokenCharts({ symbol }) {
             </Button>
             <Button
               fontSize="xs"
-              disabled={metric === "p"}
-              onClick={() => handleMetric("p")}
+              disabled={metric === "v"}
+              onClick={() => handleMetric("v")}
+              sx={{ borderRadius: 15 }}
               bg={useColorModeValue("gray.300", "gray.700")}
               color={useColorModeValue("black", "white")}
               _hover={{ bg: useColorModeValue("white", "black") }}
               _disabled={{ bg: useColorModeValue("white", "black") }}
               className="chart-button"
             >
-              Price
+              Volume
             </Button>
           </HStack>
 
