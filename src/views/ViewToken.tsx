@@ -29,7 +29,10 @@ export default function ViewToken() {
     const assets = await getAssets();
     const tokens = assets.tokens;
     const actualPrice = await getCurrentPrice(symbol);
-    let rounded = numeral(actualPrice.price).format("0.00a");
+    let rounded =
+      actualPrice.price > 0.01
+        ? numeral(actualPrice.price).format("0.00a")
+        : numeral(actualPrice.price).format("0.00000a");
 
     let data = tokens.filter((_) => {
       if (_.symbol === symbol) {

@@ -117,7 +117,10 @@ export default function TokenCharts({ symbol }) {
       day = summary[total].date;
     }
 
-    const rounded = numeral(tokens[tokens.length - 1].close).format("0.00a");
+    const rounded =
+      tokens[tokens.length - 1].close > 0.01
+        ? numeral(tokens[tokens.length - 1].close).format("0.00a")
+        : numeral(tokens[tokens.length - 1].close).format("0.00000a");
 
     const chart = createChart(`price-${duration}`, {
       layout: {

@@ -46,7 +46,10 @@ export const useTopNative = () => {
             )}{" "}
           </Link>
         ),
-        price: `$${numeral(summary[property]["price"]).format("0.00a")}`,
+        price:
+          summary[property]["price"] > 0.01
+            ? `$${numeral(summary[property]["price"]).format("0.00a")}`
+            : `$${numeral(summary[property]["price"]).format("0.00000a")}`,
         volume24: `$${numeral(summary[property]["volume_usd"]).format(
           "0.00a"
         )}`,
